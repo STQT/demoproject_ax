@@ -1,11 +1,16 @@
+import os
+
 from datetime import datetime, timedelta
+
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, HTTPBearer
 from jose import JWTError, jwt
+from dotenv import load_dotenv
 
 from src.crud import pwd_context
 
-SECRET_KEY = "mysecretkey"  # TODO: load .env variable
+load_dotenv()
+SECRET_KEY = os.getenv("SECRET_KEY", default="mysecretkey")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
