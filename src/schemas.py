@@ -16,6 +16,10 @@ class UserBase(BaseModel):
         return v
 
 
+class User(UserBase):
+    id: int
+
+
 class UserCreate(UserBase):
     password: str = Field("hashed_password", min_length=6, max_length=100)
 
@@ -29,10 +33,6 @@ class UserUpdate(BaseModel):
     username: str = None
     email: str = None
     full_name: str = None
-
-
-class User(UserBase):
-    id: int
 
 
 class AccessToken(BaseModel):

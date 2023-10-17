@@ -1,9 +1,10 @@
+import asyncio
 from datetime import timedelta
 from typing import List
 
 from src import crud, schemas, authentication
 from src.authentication import verify_password
-from src.database import async_session
+from src.database import async_session, create_db_tables
 
 from fastapi import FastAPI, HTTPException, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -75,3 +76,13 @@ async def search_user_by_name(username: str, db: AsyncSession = Depends(get_db))
     if user is None:
         raise HTTPException(status_code=404, detail="User not found")
     return user
+
+
+@app.on_event("startup")
+async def startup_event():
+    await create_db_tables()
+
+
+@app.on_event("shutdown")
+async def shutdown_event():
+    await async_session.close()
